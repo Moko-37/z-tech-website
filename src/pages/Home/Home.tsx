@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
-import { Smartphone, Globe, Layout, Palette, Zap, ArrowRight, ArrowUpRight, Star, Users, TrendingUp } from 'lucide-react';
+import { Smartphone, Globe, Layout, Palette, ArrowRight, ArrowUpRight, Star, Users, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Seo from '../../components/UI/Seo';
 import { BentoGrid, BentoItem } from '../../components/UI/BentoGrid';
