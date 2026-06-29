@@ -23,7 +23,7 @@ const DATA = {
   services: ['Mobile App Creation', 'Web App Creation', 'UI/UX Design', 'WordPress Solutions'],
   company: [{ label: 'About Us', path: '/about' }, { label: 'Contact', path: '/contact' }, { label: 'Privacy Policy', path: '#' }, { label: 'Terms of Service', path: '#' }],
   socials: [{ Icon: TwitterIcon, href: '#', label: 'Twitter' }, { Icon: GithubIcon, href: '#', label: 'GitHub' }, { Icon: LinkedinIcon, href: '#', label: 'LinkedIn' }],
-  contacts: [{ Icon: Mail, text: 'Z-TECH@gmail.com', href: 'mailto:Z-TECH@gmail.com' }, { Icon: Phone, text: '+237 654 45 89 96', href: 'tel:+237654458996' }, { Icon: MapPin, text: 'Douala, Cameroun', href: '#' }],
+  contacts: [{ Icon: Mail, text: 'ztechec123@gmail.com', href: 'mailto:ztechec123@gmail.com' }, { Icon: Phone, text: '+237 654 45 89 96', href: 'tel:+237654458996' }, { Icon: MapPin, text: 'Douala, Cameroun', href: '#' }],
 };
 
 const fadeUp: Variants = {

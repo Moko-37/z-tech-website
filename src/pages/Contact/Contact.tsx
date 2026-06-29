@@ -4,10 +4,12 @@ import { Mail, Phone, MapPin, Send, MessageSquare, CheckCircle, Loader2, ArrowUp
 import Seo from '../../components/UI/Seo';
 
 /* ─── Data ─────────────────────────────────────────────────── */
+const CONTACT_EMAIL = import.meta.env.VITE_CONTACT_EMAIL || 'ztechec123@gmail.com';
+
 const CONTACTS = [
-  { icon: Mail,    label: 'Email',  value: 'Zeradon@gmail.com',   href: 'mailto:Z-TECH@gmail.com' },
-  { icon: Phone,   label: 'Phone',  value: '+237 654 45 89 96',  href: 'tel:+237654458996' },
-  { icon: MapPin,  label: 'Office', value: 'Douala, Cameroun',   href: '#' },
+  { icon: Mail, label: 'Email', value: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}` },
+  { icon: Phone, label: 'Phone', value: '+237 654 45 89 96', href: 'tel:+237654458996' },
+  { icon: MapPin, label: 'Office', value: 'Douala, Cameroun', href: '#' },
 ];
 
 const SERVICES = [
@@ -18,7 +20,21 @@ const SERVICES = [
   'Technical Advisory',
 ];
 
-type Status = 'idle' | 'loading' | 'success';
+type Status = 'idle' | 'loading' | 'success' | 'error';
+
+type FormState = {
+  name: string;
+  email: string;
+  service: string;
+  message: string;
+};
+
+const initialFormState: FormState = {
+  name: '',
+  email: '',
+  service: SERVICES[0],
+  message: '',
+};
 
 const inputClass =
   'w-full px-4 py-3 bg-secondary/40 border border-border/40 rounded-xl text-sm ' +
@@ -29,11 +45,44 @@ const inputClass =
 const Contact: React.FC = () => {
   const [status, setStatus] = React.useState<Status>('idle');
   const [focused, setFocused] = React.useState<string | null>(null);
+  const [formState, setFormState] = React.useState<FormState>(initialFormState);
+  const [errorMessage, setErrorMessage] = React.useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { id, value } = e.target;
+    setFormState((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('loading');
-    setTimeout(() => setStatus('success'), 2000);
+    setErrorMessage('');
+
+    try {
+      const formData = new FormData();
+      formData.append('name', formState.name);
+      formData.append('email', formState.email);
+      formData.append('service', formState.service);
+      formData.append('message', formState.message);
+      formData.append('_subject', `New contact request from ${formState.name}`);
+      formData.append('_captcha', 'false');
+      formData.append('_template', 'table');
+
+      const response = await fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Unable to send your message right now.');
+      }
+
+      setFormState(initialFormState);
+      setStatus('success');
+    } catch {
+      setStatus('error');
+      setErrorMessage('Unable to send your message right now. Please email us directly at ' + CONTACT_EMAIL + '.');
+    }
   };
 
   const fadeUp = (delay = 0) => ({
@@ -187,7 +236,7 @@ const Contact: React.FC = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {[
-                        { id: 'name',  label: 'Name',  type: 'text',  placeholder: 'John Doe' },
+                        { id: 'name', label: 'Name', type: 'text', placeholder: 'John Doe' },
                         { id: 'email', label: 'Email', type: 'email', placeholder: 'john@example.com' },
                       ].map(({ id, label, type, placeholder }) => (
                         <div key={id} className="space-y-1.5">
@@ -196,7 +245,12 @@ const Contact: React.FC = () => {
                           </label>
                           <div className="relative">
                             <input
-                              id={id} type={type} placeholder={placeholder} required
+                              id={id}
+                              type={type}
+                              value={formState[id as keyof FormState]}
+                              placeholder={placeholder}
+                              required
+                              onChange={handleChange}
                               onFocus={() => setFocused(id)}
                               onBlur={() => setFocused(null)}
                               className={inputClass}
@@ -217,8 +271,8 @@ const Contact: React.FC = () => {
                       <label htmlFor="service" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                         Service of Interest
                       </label>
-                      <select id="service" className={inputClass}>
-                        {SERVICES.map((s) => <option key={s}>{s}</option>)}
+                      <select id="service" value={formState.service} onChange={handleChange} className={inputClass}>
+                        {SERVICES.map((s) => <option key={s} value={s}>{s}</option>)}
                       </select>
                     </div>
 
@@ -228,7 +282,12 @@ const Contact: React.FC = () => {
                       </label>
                       <div className="relative">
                         <textarea
-                          id="message" rows={5} placeholder="Tell us about your vision..." required
+                          id="message"
+                          rows={5}
+                          value={formState.message}
+                          placeholder="Tell us about your vision..."
+                          required
+                          onChange={handleChange}
                           onFocus={() => setFocused('message')}
                           onBlur={() => setFocused(null)}
                           className={`${inputClass} resize-none`}
@@ -242,6 +301,10 @@ const Contact: React.FC = () => {
                         )}
                       </div>
                     </div>
+
+                    {status === 'error' && (
+                      <p className="text-sm text-red-500">{errorMessage}</p>
+                    )}
 
                     <motion.button
                       type="submit"
