@@ -22,13 +22,21 @@ const VALUES = [
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 28 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
+  transition: { 
+    duration: 0.6, 
+    delay, 
+    ease: [0.22, 1, 0.36, 1] as const // 👈 Bloque le type pour TypeScript
+  },
 });
 
 const fadeIn = (delay = 0) => ({
   initial: { opacity: 0, scale: 0.92 },
   animate: { opacity: 1, scale: 1 },
-  transition: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] },
+  transition: { 
+    duration: 0.7, 
+    delay, 
+    ease: [0.22, 1, 0.36, 1] as const // 👈 Bloque le type pour TypeScript
+  },
 });
 
 const About: React.FC = () => (

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring, type Variants } from 'framer-motion';
 import { Sun, Moon, Menu, X, Cpu, ArrowUpRight } from 'lucide-react';
 import { useTheme } from '../../theme/ThemeContext';
 
@@ -128,7 +128,7 @@ const Navbar: React.FC = () => {
     { name: 'Contact', path: '/contact' },
   ];
 
-  const staggerItem = {
+  const staggerItem: Variants = {
     hidden: { opacity: 0, y: 12 },
     visible: (i: number) => ({
       opacity: 1,

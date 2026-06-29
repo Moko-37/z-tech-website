@@ -14,7 +14,7 @@ interface SeoProps {
 const SITE = {
   name: 'Z-TECH',
   url: 'https://z-tech.cm',
-  defaultImage: '/og-image.jpg',
+  defaultImage: '/images/logo.png',
   twitterHandle: '@ztech_cm',
 };
 

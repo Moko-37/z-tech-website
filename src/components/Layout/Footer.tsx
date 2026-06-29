@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion , type Variants} from 'framer-motion';
 import { Cpu, Mail, Phone, MapPin, ArrowUpRight, ArrowUp } from 'lucide-react';
 
 const GithubIcon = ({ size }: { size: number }) => (
@@ -26,9 +26,20 @@ const DATA = {
   contacts: [{ Icon: Mail, text: 'Z-TECH@gmail.com', href: 'mailto:Z-TECH@gmail.com' }, { Icon: Phone, text: '+237 654 45 89 96', href: 'tel:+237654458996' }, { Icon: MapPin, text: 'Douala, Cameroun', href: '#' }],
 };
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: (i: number) => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, duration: 0.5, ease: [0.22, 1, 0.36, 1] } }),
+const fadeUp: Variants = {
+  hidden: { 
+    opacity: 0, 
+    y: 24 
+  },
+  visible: (i: number) => ({ 
+    opacity: 1, 
+    y: 0, 
+    transition: { 
+      delay: i * 0.08, 
+      duration: 0.5, 
+      ease: [0.22, 1, 0.36, 1] 
+    } 
+  }),
 };
 
 const FLink: React.FC<{ label: string; to: string }> = ({ label, to }) => (
