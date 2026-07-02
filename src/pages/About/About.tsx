@@ -2,22 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Target, Eye, Heart, Users, ArrowUpRight, Zap, Shield } from 'lucide-react';
 import Seo from '../../components/UI/Seo';
-
-const STATS = [
-  { value: '50+', label: 'Successful Launches' },
-  { value: '98%', label: 'Client Satisfaction' },
-  { value: '3+', label: 'Years Experience' },
-  { value: '24h', label: 'Support Response' },
-];
-
-const VALUES = [
-  { icon: Target, title: 'Precision', desc: 'Every line of code is written with intent and performance in mind.' },
-  { icon: Heart, title: 'Empathy', desc: 'We build for users, not just for requirements.' },
-  { icon: Eye, title: 'Transparency', desc: 'Honesty is our baseline for every interaction and project milestone.' },
-  { icon: Zap, title: 'Speed', desc: 'Fast delivery without compromising on quality or scalability.' },
-  { icon: Shield, title: 'Reliability', desc: 'Rock-solid architectures built to handle real-world demands.' },
-  { icon: Users, title: 'Partnership', desc: 'We treat every founder as a long-term partner, not a client ticket.' },
-];
+import { useLanguage } from '../../theme/LanguageContext';
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 28 },
@@ -39,7 +24,27 @@ const fadeIn = (delay = 0) => ({
   },
 });
 
-const About: React.FC = () => (
+const About: React.FC = () => {
+  const { t, language } = useLanguage();
+  const isFrench = language === 'fr';
+
+  const stats = [
+    { value: '50+', label: isFrench ? 'Lancements réussis' : 'Successful Launches' },
+    { value: '98%', label: isFrench ? 'Satisfaction client' : 'Client Satisfaction' },
+    { value: '3+', label: isFrench ? 'Années d\'expérience' : 'Years Experience' },
+    { value: '24h', label: isFrench ? 'Réponse support' : 'Support Response' },
+  ];
+
+  const values = [
+    { icon: Target, title: isFrench ? 'Précision' : 'Precision', desc: isFrench ? 'Chaque ligne de code est écrite avec intention et performance.' : 'Every line of code is written with intent and performance in mind.' },
+    { icon: Heart, title: isFrench ? 'Empathie' : 'Empathy', desc: isFrench ? 'Nous construisons pour les utilisateurs, pas seulement pour les exigences.' : 'We build for users, not just for requirements.' },
+    { icon: Eye, title: isFrench ? 'Transparence' : 'Transparency', desc: isFrench ? 'L\'honnêteté est notre base pour chaque interaction et projet.' : 'Honesty is our baseline for every interaction and project milestone.' },
+    { icon: Zap, title: isFrench ? 'Vitesse' : 'Speed', desc: isFrench ? 'Livraison rapide sans compromettre qualité ni évolutivité.' : 'Fast delivery without compromising on quality or scalability.' },
+    { icon: Shield, title: isFrench ? 'Fiabilité' : 'Reliability', desc: isFrench ? 'Des architectures solides pour des usages réels.' : 'Rock-solid architectures built to handle real-world demands.' },
+    { icon: Users, title: isFrench ? 'Partenariat' : 'Partnership', desc: isFrench ? 'Nous traitons chaque fondateur comme un partenaire à long terme.' : 'We treat every founder as a long-term partner, not a client ticket.' },
+  ];
+
+  return (
   <>
     <Seo
       title="About Us"
@@ -62,14 +67,14 @@ const About: React.FC = () => (
               <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase
                                text-primary bg-primary/10 px-3 py-1.5 rounded-full mb-6">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                Our Story
+                {t('aboutHeroEyebrow')}
               </span>
             </motion.div>
 
             <motion.h1 {...fadeUp(0.08)} className="font-heading mb-6 leading-tight">
-              Redefining the{' '}
+              {isFrench ? 'Redéfinir l\'' : 'Redefining the'}{' '}
               <span className="relative text-primary">
-                Startup
+                {isFrench ? 'startup' : 'Startup'}
                 <motion.span
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
@@ -77,21 +82,21 @@ const About: React.FC = () => (
                   className="absolute -bottom-1 left-0 right-0 h-[2px] bg-primary/40 origin-left block"
                 />
               </span>{' '}
-              Ecosystem
+              {isFrench ? 'écosystème' : 'Ecosystem'}
             </motion.h1>
 
             <motion.p {...fadeUp(0.14)} className="text-lg text-muted-foreground mb-4 leading-relaxed">
-              Founded in 2024, Z-TECH was born out of a simple observation: most startups struggle not because of their ideas, but because of their technical execution.
+              {t('aboutHeroP1')}
             </motion.p>
             <motion.p {...fadeUp(0.18)} className="text-lg text-muted-foreground mb-10 leading-relaxed">
-              We are engineers, designers, and strategists passionate about bridging complex code and meaningful user impact — giving every ambitious founder the technical power of a Fortune 500 company.
+              {t('aboutHeroP2')}
             </motion.p>
 
             <motion.div {...fadeUp(0.22)}>
               <a href="/contact"
                 className="group inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary text-primary-foreground
                            text-sm font-semibold shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/35 transition-shadow duration-300">
-                Work with us
+                {t('aboutHeroCta')}
                 <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
               </a>
             </motion.div>
@@ -140,7 +145,7 @@ const About: React.FC = () => (
           transition={{ duration: 0.6, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
           className="grid grid-cols-2 md:grid-cols-4 gap-px mt-20 border border-border/30 rounded-2xl overflow-hidden"
         >
-          {STATS.map(({ value, label }) => (
+          {stats.map(({ value, label }) => (
             <div key={label} className="glass-card px-8 py-6 text-center space-y-1">
               <div className="text-3xl font-bold font-heading text-primary">{value}</div>
               <div className="text-xs text-muted-foreground">{label}</div>
@@ -160,19 +165,19 @@ const About: React.FC = () => (
             className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-primary bg-primary/10 px-3 py-1.5 rounded-full mb-4"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-primary" />
-            What drives us
+            {t('aboutValuesEyebrow')}
           </motion.span>
           <motion.h2
             initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.08 }}
             className="font-heading"
           >
-            Our Core Values
+            {t('aboutValuesTitle')}
           </motion.h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {VALUES.map(({ icon: Icon, title, desc }, i) => (
+          {values.map(({ icon: Icon, title, desc }, i) => (
             <motion.div
               key={title}
               initial={{ opacity: 0, y: 24 }}
@@ -209,6 +214,7 @@ const About: React.FC = () => (
       </div>
     </section>
   </>
-);
+  );
+};
 
 export default About;

@@ -4,21 +4,10 @@ import { Smartphone, Globe, Layout, Palette, ArrowRight, ArrowUpRight, Star, Use
 import { Link } from 'react-router-dom';
 import Seo from '../../components/UI/Seo';
 import { BentoGrid, BentoItem } from '../../components/UI/BentoGrid';
+import { useLanguage } from '../../theme/LanguageContext';
 
 /* ─── Data ─────────────────────────────────────────────────── */
 const LOGOS = ['Stripe', 'Vercel', 'Figma', 'Linear', 'Notion', 'Supabase'];
-
-const TESTIMONIALS = [
-  { name: 'Awa N.', role: 'CEO @ MoovStartup', text: 'Z-TECH delivered our MVP in record time. The quality exceeded all expectations.' },
-  { name: 'Carlos M.', role: 'Founder @ FinTrack', text: 'Professional, fast, and genuinely passionate about what they build.' },
-  { name: 'Fatou D.', role: 'CPO @ EdTech Africa', text: 'The best technical partner we\'ve worked with. Highly recommended.' },
-];
-
-const STATS = [
-  { icon: Users, value: '50+', label: 'Happy clients' },
-  { icon: Star, value: '4.9', label: 'Average rating' },
-  { icon: TrendingUp, value: '98%', label: 'Satisfaction rate' },
-];
 
 /* ─── 3D Tilt Card ──────────────────────────────────────────── */
 const TiltCard: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => {
@@ -92,6 +81,69 @@ const Home: React.FC = () => {
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+  const { t, language } = useLanguage();
+  const isFrench = language === 'fr';
+
+  const stats = [
+    { icon: Users, value: '50+', label: t('homeStatsClients') },
+    { icon: Star, value: '4.9', label: t('homeStatsRating') },
+    { icon: TrendingUp, value: '98%', label: t('homeStatsSatisfaction') },
+  ];
+
+  const testimonials = [
+    {
+      name: 'Awa N.',
+      role: isFrench ? 'PDG @ MoovStartup' : 'CEO @ MoovStartup',
+      text: isFrench
+        ? 'Z-TECH a livré notre MVP en un temps record. La qualité a dépassé toutes nos attentes.'
+        : 'Z-TECH delivered our MVP in record time. The quality exceeded all expectations.',
+    },
+    {
+      name: 'Carlos M.',
+      role: isFrench ? 'Fondateur @ FinTrack' : 'Founder @ FinTrack',
+      text: isFrench
+        ? 'Professionnel, rapide et vraiment passionné par ce qu’il construit.'
+        : 'Professional, fast, and genuinely passionate about what they build.',
+    },
+    {
+      name: 'Fatou D.',
+      role: isFrench ? 'CPO @ EdTech Africa' : 'CPO @ EdTech Africa',
+      text: isFrench
+        ? 'Le meilleur partenaire technique avec lequel nous avons travaillé. Hautement recommandé.'
+        : 'The best technical partner we\'ve worked with. Highly recommended.',
+    },
+  ];
+
+  const services = [
+    {
+      title: t('homeServicesMobileTitle'),
+      description: t('homeServicesMobileDesc'),
+      icon: Smartphone,
+      tag: t('homeServicesTagPopular'),
+      className: 'md:col-span-2',
+    },
+    {
+      title: t('homeServicesUiTitle'),
+      description: t('homeServicesUiDesc'),
+      icon: Palette,
+      tag: t('homeServicesTagCreative'),
+      className: '',
+    },
+    {
+      title: t('homeServicesWebTitle'),
+      description: t('homeServicesWebDesc'),
+      icon: Globe,
+      tag: t('homeServicesTagService'),
+      className: '',
+    },
+    {
+      title: t('homeServicesWordPressTitle'),
+      description: t('homeServicesWordPressDesc'),
+      icon: Layout,
+      tag: t('homeServicesTagService'),
+      className: 'md:col-span-2',
+    },
+  ];
 
   return (
     <>
@@ -136,13 +188,13 @@ const Home: React.FC = () => {
             transition={{ duration: 0.7, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
             className="font-heading mb-6 leading-[1.1]"
           >
-            Engineering the{' '}
+            {t('homeHeroTitleStart')}{' '}
             <span className="relative inline-block">
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-400 to-primary bg-[length:200%] animate-[shimmer_3s_linear_infinite]">
-                Next Generation
+                {t('homeHeroHighlight')}
               </span>
             </span>
-            <br />of Digital Experiences
+            <br />{t('homeHeroTitleEnd')}
           </motion.h1>
 
           {/* Sub */}
@@ -152,8 +204,7 @@ const Home: React.FC = () => {
             transition={{ duration: 0.7, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
             className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-12"
           >
-            We bridge the gap between complex technology and intuitive design.
-            From mobile apps to enterprise web solutions — built for scale and performance.
+            {t('homeHeroSubtitle')}
           </motion.p>
 
           {/* CTAs */}
@@ -167,7 +218,7 @@ const Home: React.FC = () => {
               <Link to="/contact"
                 className="group flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground rounded-xl font-semibold text-sm
                            shadow-lg shadow-primary/30 hover:shadow-xl hover:shadow-primary/40 transition-shadow duration-300">
-                Start a Project
+                {t('homeHeroCtaPrimary')}
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-200" />
               </Link>
             </motion.div>
@@ -175,7 +226,7 @@ const Home: React.FC = () => {
               <Link to="/services"
                 className="flex items-center gap-2 px-7 py-3.5 glass rounded-xl font-semibold text-sm border border-white/10
                            hover:border-primary/30 hover:bg-primary/5 transition-all duration-200">
-                Explore Services
+                {t('homeHeroCtaSecondary')}
               </Link>
             </motion.div>
           </motion.div>
@@ -187,7 +238,7 @@ const Home: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.44, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-wrap justify-center gap-8 mt-16 pt-10 border-t border-border/20"
           >
-            {STATS.map(({ icon: Icon, value, label }) => (
+            {stats.map(({ icon: Icon, value, label }) => (
               <div key={label} className="flex items-center gap-3">
                 <div className="p-2 bg-primary/10 rounded-lg">
                   <Icon size={16} className="text-primary" />
@@ -215,7 +266,7 @@ const Home: React.FC = () => {
       <section className="py-12 border-y border-border/20 bg-secondary/10">
         <div className="max-w-7xl mx-auto px-6 mb-6">
           <p className="text-center text-xs font-semibold uppercase tracking-widest text-muted-foreground/50">
-            Trusted tools & partners
+            {t('homeTrustedLabel')}
           </p>
         </div>
         <Marquee items={LOGOS} />
@@ -229,29 +280,36 @@ const Home: React.FC = () => {
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
               className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-primary bg-primary/10 px-3 py-1.5 rounded-full"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-primary" /> What we do
+              <span className="w-1.5 h-1.5 rounded-full bg-primary" /> {t('homeWhatWeDo')}
             </motion.span>
             <motion.h2
               initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.08 }}
               className="font-heading"
             >
-              Core Capabilities
+              {t('homeCapabilitiesTitle')}
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.14 }}
               className="text-muted-foreground max-w-xl mx-auto"
             >
-              Comprehensive solutions tailored to your business needs, powered by the latest tech stacks.
+              {t('homeCapabilitiesDesc')}
             </motion.p>
           </div>
 
           <BentoGrid>
-            <BentoItem title="Mobile Development" description="High-performance iOS and Android apps built with React Native and Flutter for seamless user experiences." icon={Smartphone} className="md:col-span-2" tag="Popular" />
-            <BentoItem title="UI/UX Design" description="User-centric interfaces that blend aesthetic beauty with functional clarity." icon={Palette} delay={0.1} tag="Creative" />
-            <BentoItem title="Web Solutions" description="Scalable, SEO-optimized web applications using Next.js and high-speed cloud infrastructure." icon={Globe} delay={0.2} />
-            <BentoItem title="WordPress Mastery" description="Custom WordPress development for power-users who need control and flexibility." icon={Layout} className="md:col-span-2" delay={0.3} />
+            {services.map((service, index) => (
+              <BentoItem
+                key={service.title}
+                title={service.title}
+                description={service.description}
+                icon={service.icon}
+                className={service.className}
+                tag={service.tag}
+                delay={index * 0.1}
+              />
+            ))}
           </BentoGrid>
         </div>
       </section>
@@ -264,19 +322,19 @@ const Home: React.FC = () => {
               initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
               className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-primary bg-primary/10 px-3 py-1.5 rounded-full"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-primary" /> Client voices
+              <span className="w-1.5 h-1.5 rounded-full bg-primary" /> {t('homeTestimonialsLabel')}
             </motion.span>
             <motion.h2
               initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.08 }}
               className="font-heading"
             >
-              What our clients say
+              {t('homeTestimonialsTitle')}
             </motion.h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map(({ name, role, text }, i) => (
+            {testimonials.map(({ name, role, text }, i) => (
               <motion.div
                 key={name}
                 initial={{ opacity: 0, y: 24 }}
@@ -326,21 +384,20 @@ const Home: React.FC = () => {
 
                 <div className="relative z-10 space-y-6">
                   <span className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-primary bg-primary/10 px-3 py-1.5 rounded-full">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" /> Limited spots available
+                    <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" /> {t('homeCtaEyebrow')}
                   </span>
                   <h2 className="font-heading text-4xl md:text-5xl leading-tight">
-                    Ready to launch<br />your vision?
+                    {t('homeCtaTitle')}
                   </h2>
                   <p className="text-muted-foreground text-lg max-w-xl mx-auto leading-relaxed">
-                    Join 50+ startups that have scaled their digital presence with Z-TECH.
-                    Let's build something extraordinary together.
+                    {t('homeCtaDesc')}
                   </p>
                   <div className="flex flex-wrap justify-center gap-4 pt-2">
                     <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} transition={{ type: 'spring', stiffness: 400, damping: 20 }}>
                       <Link to="/contact"
                         className="group/btn flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-xl font-semibold
                                    shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 transition-shadow duration-300">
-                        Get a Free Consultation
+                        {t('homeCtaPrimary')}
                         <ArrowUpRight size={16} className="group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform duration-200" />
                       </Link>
                     </motion.div>
@@ -348,7 +405,7 @@ const Home: React.FC = () => {
                       <Link to="/about"
                         className="flex items-center gap-2 px-8 py-4 glass rounded-xl font-semibold border border-white/10
                                    hover:border-primary/30 transition-all duration-200">
-                        Learn About Us
+                        {t('homeCtaSecondary')}
                       </Link>
                     </motion.div>
                   </div>

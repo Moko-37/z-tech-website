@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Seo from '../../components/UI/Seo';
+import { useLanguage } from '../../theme/LanguageContext';
 
 /* ─── Data ─────────────────────────────────────────────────── */
 const SERVICES = [
@@ -37,26 +38,6 @@ const SERVICES = [
     features: ['Custom Themes', 'Speed Optimization', 'SEO Migration', 'Security Hardening'],
     stat: { value: '<48h', label: 'First delivery' },
   },
-];
-
-const TECH = [
-  { name: 'React Native', category: 'Mobile' },
-  { name: 'Flutter', category: 'Mobile' },
-  { name: 'Next.js', category: 'Web' },
-  { name: 'Node.js', category: 'Backend' },
-  { name: 'Laravel', category: 'Backend' },
-  { name: 'TypeScript', category: 'Language' },
-  { name: 'Tailwind CSS', category: 'Styling' },
-  { name: 'Figma', category: 'Design' },
-  { name: 'MySQL', category: 'Database' },
-  { name: 'Supabase', category: 'Database' },
-];
-
-const PROCESS = [
-  { icon: Star,         step: '01', title: 'Discovery',   desc: 'We dive deep into your vision, goals, and constraints.' },
-  { icon: Palette,      step: '02', title: 'Design',       desc: 'Wireframes and prototypes crafted for your users.' },
-  { icon: Zap,          step: '03', title: 'Build',        desc: 'Fast, clean development with daily progress updates.' },
-  { icon: CheckCircle2, step: '04', title: 'Launch',       desc: 'Deployment, testing, and post-launch support included.' },
 ];
 
 /* ─── Service Card ──────────────────────────────────────────── */
@@ -149,7 +130,86 @@ const ServiceCard: React.FC<{ service: typeof SERVICES[0]; index: number }> = ({
 };
 
 /* ─── Page ──────────────────────────────────────────────────── */
-const Services: React.FC = () => (
+const Services: React.FC = () => {
+  const { t, language } = useLanguage();
+  const isFrench = language === 'fr';
+
+  const servicesData = [
+    {
+      id: 'mobile',
+      icon: Smartphone,
+      tag: isFrench ? 'Populaire' : 'Popular',
+      title: isFrench ? 'Création d’applications mobiles' : 'Mobile App Creation',
+      description: isFrench
+        ? 'Applications mobiles natives et multiplateformes avec une performance fluide et un niveau d’engagement exceptionnel.'
+        : 'Native and cross-platform mobile applications with buttery-smooth performance and exceptional user engagement. Specialists in React Native and Flutter.',
+      features: isFrench
+        ? ['UI/UX personnalisée', 'Synchronisation cloud', 'Notifications push', 'Optimisation App Store']
+        : ['Custom UI/UX', 'Cloud Sync', 'Push Notifications', 'App Store Optimization'],
+      stat: { value: '30+', label: isFrench ? 'Apps livrées' : 'Apps shipped' },
+    },
+    {
+      id: 'web',
+      icon: Globe,
+      tag: isFrench ? 'Évolutif' : 'Scalable',
+      title: isFrench ? 'Création d’applications web' : 'Web App Creation',
+      description: isFrench
+        ? 'Applications web robustes, sécurisées et évolutives adaptées à votre logique métier grâce à Next.js, React et Node.js.'
+        : 'Robust, scalable, and secure web applications tailored to your business logic using Next.js, React, and Node.js with enterprise-grade architecture.',
+      features: isFrench
+        ? ['Données temps réel', 'Progressive Web Apps', 'Tableaux de bord', 'Intégration API']
+        : ['Real-time Data', 'Progressive Web Apps', 'Admin Dashboards', 'API Integration'],
+      stat: { value: '99%', label: isFrench ? 'SLA de disponibilité' : 'Uptime SLA' },
+    },
+    {
+      id: 'ui-ux',
+      icon: Palette,
+      tag: isFrench ? 'Créatif' : 'Creative',
+      title: isFrench ? 'Design UI/UX' : 'UI/UX Design',
+      description: isFrench
+        ? 'Le design est plus que l’apparence — c’est la façon dont cela fonctionne. Nous créons des parcours intuitifs pour réduire les frictions et augmenter la conversion.'
+        : 'Design is more than looks — it\'s how it works. We craft intuitive user journeys that minimize friction, maximize conversion, and delight at every step.',
+      features: isFrench
+        ? ['Wireframing', 'Prototypage', 'Recherche utilisateur', 'Branding visuel']
+        : ['Wireframing', 'Prototyping', 'User Research', 'Visual Branding'],
+      stat: { value: '4.9★', label: isFrench ? 'Note design' : 'Design rating' },
+    },
+    {
+      id: 'wordpress',
+      icon: Layout,
+      tag: isFrench ? 'Livraison rapide' : 'Fast delivery',
+      title: isFrench ? 'Création WordPress' : 'WordPress Creation',
+      description: isFrench
+        ? 'Sites WordPress haut de gamme et performants. Des thèmes sur mesure aux intégrations e-commerce complexes — livrés rapidement et optimisés pour le SEO.'
+        : 'High-end, performance-focused WordPress sites. From custom themes to complex e-commerce integrations — delivered fast, optimized for search.',
+      features: isFrench
+        ? ['Thèmes sur mesure', 'Optimisation vitesse', 'Migration SEO', 'Sécurisation']
+        : ['Custom Themes', 'Speed Optimization', 'SEO Migration', 'Security Hardening'],
+      stat: { value: '<48h', label: isFrench ? 'Première livraison' : 'First delivery' },
+    },
+  ];
+
+  const processData = [
+    { icon: Star, step: '01', title: isFrench ? 'Découverte' : 'Discovery', desc: isFrench ? 'Nous explorons votre vision, vos objectifs et vos contraintes.' : 'We dive deep into your vision, goals, and constraints.' },
+    { icon: Palette, step: '02', title: isFrench ? 'Design' : 'Design', desc: isFrench ? 'Wireframes et prototypes conçus pour vos utilisateurs.' : 'Wireframes and prototypes crafted for your users.' },
+    { icon: Zap, step: '03', title: isFrench ? 'Développement' : 'Build', desc: isFrench ? 'Développement propre et rapide avec suivi quotidien.' : 'Fast, clean development with daily progress updates.' },
+    { icon: CheckCircle2, step: '04', title: isFrench ? 'Lancement' : 'Launch', desc: isFrench ? 'Déploiement, tests et support après lancement inclus.' : 'Deployment, testing, and post-launch support included.' },
+  ];
+
+  const techData = [
+    { name: 'React Native', category: isFrench ? 'Mobile' : 'Mobile' },
+    { name: 'Flutter', category: isFrench ? 'Mobile' : 'Mobile' },
+    { name: 'Next.js', category: isFrench ? 'Web' : 'Web' },
+    { name: 'Node.js', category: isFrench ? 'Backend' : 'Backend' },
+    { name: 'Laravel', category: isFrench ? 'Backend' : 'Backend' },
+    { name: 'TypeScript', category: isFrench ? 'Langage' : 'Language' },
+    { name: 'Tailwind CSS', category: isFrench ? 'Style' : 'Styling' },
+    { name: 'Figma', category: isFrench ? 'Design' : 'Design' },
+    { name: 'MySQL', category: isFrench ? 'Base de données' : 'Database' },
+    { name: 'Supabase', category: isFrench ? 'Base de données' : 'Database' },
+  ];
+
+  return (
   <>
     <Seo
       title="Our Services"
@@ -170,7 +230,7 @@ const Services: React.FC = () => (
                        text-primary bg-primary/10 px-3 py-1.5 rounded-full"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-            What we offer
+            {t('servicesHeroEyebrow')}
           </motion.span>
 
           <motion.h1
@@ -178,9 +238,9 @@ const Services: React.FC = () => (
             transition={{ duration: 0.6, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
             className="font-heading leading-tight"
           >
-            Comprehensive{' '}
+            {t('servicesHeroTitle').split('Services')[0]}{' '}
             <span className="relative text-primary">
-              Services
+              {isFrench ? 'services' : 'Services'}
               <motion.span
                 initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
                 transition={{ duration: 0.5, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -194,8 +254,7 @@ const Services: React.FC = () => (
             transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
             className="text-xl text-muted-foreground leading-relaxed"
           >
-            End-to-end digital transformation services designed to help your startup grow,
-            scale, and dominate your market — faster than you thought possible.
+            {t('servicesHeroDesc')}
           </motion.p>
 
           <motion.div
@@ -204,9 +263,9 @@ const Services: React.FC = () => (
             className="flex items-center gap-6 pt-2"
           >
             {[
-              { icon: Clock, text: 'Fast turnaround' },
-              { icon: ShieldCheck, text: 'Quality guaranteed' },
-              { icon: Star, text: '4.9 avg rating' },
+              { icon: Clock, text: t('servicesFastTurnaround') },
+              { icon: ShieldCheck, text: t('servicesQuality') },
+              { icon: Star, text: t('servicesRating') },
             ].map(({ icon: Icon, text }) => (
               <div key={text} className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Icon size={15} className="text-primary" />
@@ -218,7 +277,7 @@ const Services: React.FC = () => (
 
         {/* ── Cards grid ── */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {SERVICES.map((s, i) => <ServiceCard key={s.id} service={s} index={i} />)}
+          {servicesData.map((s, i) => <ServiceCard key={s.id} service={s} index={i} />)}
         </div>
       </div>
     </section>
@@ -231,14 +290,14 @@ const Services: React.FC = () => (
             initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
             className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-primary bg-primary/10 px-3 py-1.5 rounded-full"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-primary" /> How we work
+            <span className="w-1.5 h-1.5 rounded-full bg-primary" /> {t('servicesProcessEyebrow')}
           </motion.span>
           <motion.h2
             initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.08 }}
             className="font-heading"
           >
-            Our Process
+            {t('servicesProcessTitle')}
           </motion.h2>
         </div>
 
@@ -246,7 +305,7 @@ const Services: React.FC = () => (
           {/* Connector line (desktop) */}
           <div className="hidden md:block absolute top-10 left-[12.5%] right-[12.5%] h-px bg-border/40 z-0" />
 
-          {PROCESS.map(({ icon: Icon, step, title, desc }, i) => (
+          {processData.map(({ icon: Icon, step, title, desc }, i) => (
             <motion.div
               key={step}
               initial={{ opacity: 0, y: 24 }}
@@ -287,14 +346,14 @@ const Services: React.FC = () => (
             initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
             className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase text-primary bg-primary/10 px-3 py-1.5 rounded-full"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-primary" /> Tools of the trade
+            <span className="w-1.5 h-1.5 rounded-full bg-primary" /> {t('servicesTechEyebrow')}
           </motion.span>
           <motion.h2
             initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.08 }}
             className="font-heading"
           >
-            Our Technology Stack
+            {t('servicesTechTitle')}
           </motion.h2>
         </div>
 
@@ -303,7 +362,7 @@ const Services: React.FC = () => (
           viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.1 }}
           className="flex flex-wrap justify-center gap-3"
         >
-          {TECH.map(({ name, category }, i) => (
+          {techData.map(({ name, category }, i) => (
             <motion.div
               key={name}
               initial={{ opacity: 0, scale: 0.85 }}
@@ -326,13 +385,13 @@ const Services: React.FC = () => (
           viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }}
           className="text-center mt-16"
         >
-          <p className="text-muted-foreground mb-6">Not sure which service fits your needs?</p>
+          <p className="text-muted-foreground mb-6">{t('servicesConsultationDesc')}</p>
           <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} transition={{ type: 'spring', stiffness: 400, damping: 20 }} className="inline-block">
             <Link to="/contact"
               className="group inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground
                          rounded-xl font-semibold text-sm shadow-lg shadow-primary/25
                          hover:shadow-xl hover:shadow-primary/35 transition-shadow duration-300">
-              Get a Free Consultation
+              {t('servicesConsultationCta')}
               <ArrowUpRight size={15} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
             </Link>
           </motion.div>
@@ -340,6 +399,7 @@ const Services: React.FC = () => (
       </div>
     </section>
   </>
-);
+  );
+};
 
 export default Services;

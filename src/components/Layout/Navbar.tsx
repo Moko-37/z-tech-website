@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence, useMotionValue, useSpring, type Variants } from 'framer-motion';
 import { Sun, Moon, Menu, X, Cpu, ArrowUpRight } from 'lucide-react';
 import { useTheme } from '../../theme/ThemeContext';
+import { useLanguage } from '../../theme/LanguageContext';
 
 /* ─── Magnetic Button ─────────────────────────────────────────── */
 const MagneticButton: React.FC<{
@@ -95,6 +96,7 @@ const NavLink: React.FC<{ link: { name: string; path: string }; isActive: boolea
 /* ─── Main Navbar ─────────────────────────────────────────────── */
 const Navbar: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
+  const { language, toggleLanguage, t } = useLanguage();
   const [isOpen, setIsOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
   const [scrollProgress, setScrollProgress] = React.useState(0);
@@ -122,10 +124,10 @@ const Navbar: React.FC = () => {
   }, [isOpen]);
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Services', path: '/services' },
-    { name: 'About', path: '/about' },
-    { name: 'Contact', path: '/contact' },
+    { name: t('home'), path: '/' },
+    { name: t('services'), path: '/services' },
+    { name: t('about'), path: '/about' },
+    { name: t('contact'), path: '/contact' },
   ];
 
   const staggerItem: Variants = {
@@ -196,6 +198,16 @@ const Navbar: React.FC = () => {
 
           {/* ── Desktop Actions ── */}
           <div className="hidden md:flex items-center gap-2">
+            <MagneticButton
+              onClick={toggleLanguage}
+              aria-label={t('switchLanguage')}
+              className="relative px-3 py-2 rounded-full bg-secondary/80 hover:bg-secondary transition-colors duration-200 overflow-hidden"
+            >
+              <span className="text-sm font-semibold uppercase tracking-[0.2em] text-foreground">
+                {language === 'en' ? 'FR' : 'EN'}
+              </span>
+            </MagneticButton>
+
             {/* Theme toggle — magnetic */}
             <MagneticButton
               onClick={toggleTheme}
@@ -228,7 +240,7 @@ const Navbar: React.FC = () => {
                            text-sm font-semibold shadow-md shadow-primary/25
                            hover:shadow-lg hover:shadow-primary/35 transition-shadow duration-300"
               >
-                Get Started
+                {t('getStarted')}
                 <motion.span
                   initial={{ x: 0, y: 0 }}
                   whileHover={{ x: 2, y: -2 }}
@@ -242,6 +254,14 @@ const Navbar: React.FC = () => {
 
           {/* ── Mobile Controls ── */}
           <div className="md:hidden flex items-center gap-1">
+            <button
+              onClick={toggleLanguage}
+              className="rounded-full border border-border/60 px-2.5 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] hover:bg-secondary transition-colors"
+              aria-label={t('switchLanguage')}
+            >
+              {language === 'en' ? 'FR' : 'EN'}
+            </button>
+
             <button
               onClick={toggleTheme}
               className="p-2 rounded-full hover:bg-secondary transition-colors"
@@ -340,7 +360,7 @@ const Navbar: React.FC = () => {
                                bg-primary text-primary-foreground font-semibold text-sm
                                shadow-lg shadow-primary/25 active:scale-95 transition-transform"
                   >
-                    Get Started
+                    {t('getStarted')}
                     <ArrowUpRight size={16} />
                   </Link>
                 </motion.div>

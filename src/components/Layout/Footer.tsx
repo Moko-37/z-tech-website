@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion , type Variants} from 'framer-motion';
 import { Cpu, Mail, Phone, MapPin, ArrowUpRight, ArrowUp } from 'lucide-react';
+import { useLanguage } from '../../theme/LanguageContext';
 
 const GithubIcon = ({ size }: { size: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -55,7 +56,18 @@ const ColHead: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <h4 className="font-heading font-semibold text-sm tracking-widest uppercase text-foreground mb-6">{children}</h4>
 );
 
-const Footer: React.FC = () => (
+const Footer: React.FC = () => {
+  const { t, language } = useLanguage();
+  const isFrench = language === 'fr';
+  const footerServices = isFrench ? ['Création d’applications mobiles', 'Création d’applications web', 'Design UI/UX', 'Solutions WordPress'] : DATA.services;
+  const footerCompany = isFrench
+    ? [{ label: t('footerAbout'), path: '/about' }, { label: t('footerContactLink'), path: '/contact' }, { label: t('footerPrivacy'), path: '#' }, { label: t('footerTerms'), path: '#' }]
+    : DATA.company;
+  const footerContacts = isFrench
+    ? [{ Icon: Mail, text: 'ztechec123@gmail.com', href: 'mailto:ztechec123@gmail.com' }, { Icon: Phone, text: '+237 654 45 89 96', href: 'tel:+237654458996' }, { Icon: MapPin, text: 'Douala, Cameroun', href: '#' }]
+    : DATA.contacts;
+
+  return (
   <footer className="relative mt-auto border-t border-border/30 bg-secondary/20 pt-20 pb-8 overflow-hidden">
     <div className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-primary/5 rounded-full blur-3xl" />
 
@@ -74,7 +86,7 @@ const Footer: React.FC = () => (
           </Link>
 
           <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-            Leading the digital frontier with cutting-edge mobile and web solutions. We turn your vision into high-performance reality.
+            {t('footerBrandCopy')}
           </p>
 
           <div className="flex gap-2">
@@ -88,28 +100,28 @@ const Footer: React.FC = () => (
 
           <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} transition={{ type: 'spring', stiffness: 400, damping: 20 }} className="w-fit">
             <Link to="/contact" className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-semibold shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/35 transition-shadow duration-300">
-              Start a project <ArrowUpRight size={15} />
+              {t('footerCta')} <ArrowUpRight size={15} />
             </Link>
           </motion.div>
         </motion.div>
 
         {/* Services */}
         <motion.div custom={1} variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="md:col-span-2">
-          <ColHead>Services</ColHead>
-          <ul className="space-y-3">{DATA.services.map((s) => <li key={s}><FLink label={s} to="/services" /></li>)}</ul>
+          <ColHead>{t('footerServicesTitle')}</ColHead>
+          <ul className="space-y-3">{footerServices.map((s) => <li key={s}><FLink label={s} to="/services" /></li>)}</ul>
         </motion.div>
 
         {/* Company */}
         <motion.div custom={2} variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="md:col-span-2">
-          <ColHead>Company</ColHead>
-          <ul className="space-y-3">{DATA.company.map(({ label, path }) => <li key={label}><FLink label={label} to={path} /></li>)}</ul>
+          <ColHead>{t('footerCompanyTitle')}</ColHead>
+          <ul className="space-y-3">{footerCompany.map(({ label, path }) => <li key={label}><FLink label={label} to={path} /></li>)}</ul>
         </motion.div>
 
         {/* Contact */}
         <motion.div custom={3} variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="md:col-span-4">
-          <ColHead>Contact Us</ColHead>
+          <ColHead>{t('footerContactTitle')}</ColHead>
           <ul className="space-y-4">
-            {DATA.contacts.map(({ Icon, text, href }) => (
+            {footerContacts.map(({ Icon, text, href }) => (
               <li key={text}>
                 <a href={href} className="group flex items-center gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200">
                   <span className="flex-shrink-0 p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors duration-200"><Icon size={14} /></span>
@@ -123,23 +135,24 @@ const Footer: React.FC = () => (
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
             </span>
-            Available for new projects
+            {t('footerAvailable')}
           </div>
         </motion.div>
       </div>
 
       {/* Bottom bar */}
       <div className="pt-8 border-t border-border/20 flex flex-col md:flex-row justify-between items-center gap-4">
-        <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Z-TECH Solutions. All rights reserved.</p>
-        <p className="text-xs text-muted-foreground hidden md:block">Built with precision for the future.</p>
+        <p className="text-xs text-muted-foreground">&copy; {new Date().getFullYear()} Z-TECH Solutions. {t('footerRights')}</p>
+        <p className="text-xs text-muted-foreground hidden md:block">{t('footerBuilt')}</p>
         <motion.button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} whileHover={{ scale: 1.08, y: -2 }} whileTap={{ scale: 0.92 }} transition={{ type: 'spring', stiffness: 400, damping: 18 }}
           className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors duration-200 group" aria-label="Back to top">
-          Back to top
+          {t('footerBackToTop')}
           <span className="p-1 rounded-md border border-border/50 group-hover:border-primary/40 group-hover:bg-primary/5 transition-colors duration-200"><ArrowUp size={12} /></span>
         </motion.button>
       </div>
     </div>
   </footer>
-);
+  );
+};
 
 export default Footer;

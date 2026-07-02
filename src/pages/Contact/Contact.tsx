@@ -2,23 +2,10 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, MessageSquare, CheckCircle, Loader2, ArrowUpRight } from 'lucide-react';
 import Seo from '../../components/UI/Seo';
+import { useLanguage } from '../../theme/LanguageContext';
 
 /* ─── Data ─────────────────────────────────────────────────── */
 const CONTACT_EMAIL = import.meta.env.VITE_CONTACT_EMAIL || 'ztechec123@gmail.com';
-
-const CONTACTS = [
-  { icon: Mail, label: 'Email', value: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}` },
-  { icon: Phone, label: 'Phone', value: '+237 654 45 89 96', href: 'tel:+237654458996' },
-  { icon: MapPin, label: 'Office', value: 'Douala, Cameroun', href: '#' },
-];
-
-const SERVICES = [
-  'Mobile App Development',
-  'Web Application',
-  'UI/UX Design',
-  'WordPress Solution',
-  'Technical Advisory',
-];
 
 type Status = 'idle' | 'loading' | 'success' | 'error';
 
@@ -29,12 +16,12 @@ type FormState = {
   message: string;
 };
 
-const initialFormState: FormState = {
+const initialFormState = (service: string): FormState => ({
   name: '',
   email: '',
-  service: SERVICES[0],
+  service,
   message: '',
-};
+});
 
 const inputClass =
   'w-full px-4 py-3 bg-secondary/40 border border-border/40 rounded-xl text-sm ' +
@@ -43,9 +30,19 @@ const inputClass =
 
 /* ─── Page ─────────────────────────────────────────────────── */
 const Contact: React.FC = () => {
+  const { t, language } = useLanguage();
+  const isFrench = language === 'fr';
+  const serviceOptions = isFrench
+    ? ['Développement d\'application mobile', 'Application web', 'Design UI/UX', 'Solution WordPress', 'Conseil technique']
+    : ['Mobile App Development', 'Web Application', 'UI/UX Design', 'WordPress Solution', 'Technical Advisory'];
+  const contactItems = [
+    { icon: Mail, label: t('footerEmailLabel'), value: CONTACT_EMAIL, href: `mailto:${CONTACT_EMAIL}` },
+    { icon: Phone, label: t('footerPhoneLabel'), value: '+237 654 45 89 96', href: 'tel:+237654458996' },
+    { icon: MapPin, label: t('footerOfficeLabel'), value: 'Douala, Cameroun', href: '#' },
+  ];
   const [status, setStatus] = React.useState<Status>('idle');
   const [focused, setFocused] = React.useState<string | null>(null);
-  const [formState, setFormState] = React.useState<FormState>(initialFormState);
+  const [formState, setFormState] = React.useState<FormState>(() => initialFormState(serviceOptions[0]));
   const [errorMessage, setErrorMessage] = React.useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -77,7 +74,7 @@ const Contact: React.FC = () => {
         throw new Error('Unable to send your message right now.');
       }
 
-      setFormState(initialFormState);
+      setFormState(initialFormState(serviceOptions[0]));
       setStatus('success');
     } catch {
       setStatus('error');
@@ -115,13 +112,13 @@ const Contact: React.FC = () => {
                              text-primary bg-primary/10 px-3 py-1.5 rounded-full"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                  Get in touch
+                  {t('contactHeroEyebrow')}
                 </motion.span>
 
                 <motion.h1 {...fadeUp(0.07)} className="font-heading leading-tight">
-                  Let's build something{' '}
+                  {t('contactHeroTitle').split('great')[0]}{' '}
                   <span className="relative text-primary">
-                    great
+                    {isFrench ? 'grand' : 'great'}
                     <motion.span
                       initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
                       transition={{ duration: 0.5, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -131,14 +128,13 @@ const Contact: React.FC = () => {
                 </motion.h1>
 
                 <motion.p {...fadeUp(0.12)} className="text-lg text-muted-foreground leading-relaxed">
-                  Have a question or a project idea? We'd love to hear from you.
-                  Our team typically responds within 4 hours.
+                  {t('contactHeroDesc')}
                 </motion.p>
               </div>
 
               {/* Contact items */}
               <motion.div {...fadeUp(0.16)} className="space-y-4">
-                {CONTACTS.map(({ icon: Icon, label, value, href }) => (
+                {contactItems.map(({ icon: Icon, label, value, href }) => (
                   <a key={label} href={href}
                     className="group flex items-center gap-4 p-4 rounded-2xl border border-border/30
                                hover:border-primary/30 hover:bg-primary/5 transition-all duration-200"
@@ -166,18 +162,17 @@ const Contact: React.FC = () => {
                 <div className="pointer-events-none absolute -top-6 -right-6 w-24 h-24 bg-primary/10 rounded-full blur-2xl" />
                 <div className="flex items-center gap-2 text-primary font-semibold text-sm mb-3">
                   <MessageSquare size={16} />
-                  Professional Advisory
+                  {t('contactProfessionalAdvisory')}
                 </div>
                 <p className="text-sm text-muted-foreground leading-relaxed italic">
-                  "The fastest way to build your vision is to start with the right technical foundation.
-                  We provide advice even if you don't hire us."
+                  {t('contactQuote')}
                 </p>
                 <div className="mt-4 flex items-center gap-2">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
                   </span>
-                  <span className="text-xs text-muted-foreground">Available for new projects</span>
+                  <span className="text-xs text-muted-foreground">{t('contactAvailable')}</span>
                 </div>
               </motion.div>
             </div>
@@ -210,15 +205,15 @@ const Contact: React.FC = () => {
                     >
                       <CheckCircle className="w-10 h-10 text-green-500" />
                     </motion.div>
-                    <h3 className="text-xl font-heading font-semibold">Message sent!</h3>
+                    <h3 className="text-xl font-heading font-semibold">{t('contactSuccessTitle')}</h3>
                     <p className="text-sm text-muted-foreground max-w-xs">
-                      Thanks for reaching out. We'll get back to you within 4 hours.
+                      {t('contactSuccessDesc')}
                     </p>
                     <button
                       onClick={() => setStatus('idle')}
                       className="mt-2 text-xs text-primary hover:underline"
                     >
-                      Send another message
+                      {t('contactAnother')}
                     </button>
                   </motion.div>
                 ) : (
@@ -230,14 +225,14 @@ const Contact: React.FC = () => {
                     className="space-y-5 relative"
                   >
                     <div className="mb-6">
-                      <h2 className="text-xl font-heading font-semibold">Send a message</h2>
-                      <p className="text-sm text-muted-foreground mt-1">Fill in the form and we'll be in touch soon.</p>
+                      <h2 className="text-xl font-heading font-semibold">{t('contactFormTitle')}</h2>
+                      <p className="text-sm text-muted-foreground mt-1">{t('contactFormDesc')}</p>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {[
-                        { id: 'name', label: 'Name', type: 'text', placeholder: 'John Doe' },
-                        { id: 'email', label: 'Email', type: 'email', placeholder: 'john@example.com' },
+                        { id: 'name', label: t('contactFieldName'), type: 'text', placeholder: 'John Doe' },
+                        { id: 'email', label: t('contactFieldEmail'), type: 'email', placeholder: 'john@example.com' },
                       ].map(({ id, label, type, placeholder }) => (
                         <div key={id} className="space-y-1.5">
                           <label htmlFor={id} className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
@@ -269,23 +264,23 @@ const Contact: React.FC = () => {
 
                     <div className="space-y-1.5">
                       <label htmlFor="service" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Service of Interest
+                        {t('contactFieldService')}
                       </label>
                       <select id="service" value={formState.service} onChange={handleChange} className={inputClass}>
-                        {SERVICES.map((s) => <option key={s} value={s}>{s}</option>)}
+                        {serviceOptions.map((s) => <option key={s} value={s}>{s}</option>)}
                       </select>
                     </div>
 
                     <div className="space-y-1.5">
                       <label htmlFor="message" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                        Message
+                        {t('contactFieldMessage')}
                       </label>
                       <div className="relative">
                         <textarea
                           id="message"
                           rows={5}
                           value={formState.message}
-                          placeholder="Tell us about your vision..."
+                          placeholder={t('contactPlaceholderMessage')}
                           required
                           onChange={handleChange}
                           onFocus={() => setFocused('message')}
@@ -319,11 +314,11 @@ const Contact: React.FC = () => {
                     >
                       {status === 'loading' ? (
                         <>
-                          <Loader2 size={17} className="animate-spin" /> Sending…
+                          <Loader2 size={17} className="animate-spin" /> {t('contactSending')}
                         </>
                       ) : (
                         <>
-                          Send Message <Send size={15} />
+                          {t('contactSend')} <Send size={15} />
                         </>
                       )}
                     </motion.button>
